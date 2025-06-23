@@ -13,7 +13,7 @@ def read_requirements(filename):
 
 setup(
     name="x402-langchain",
-    version="1.1.0",
+    version="1.2.0",
     author="x402 Team",
     author_email="support@x402.org",
     description="x402 payment integration for LangChain - Enable autonomous AI agent payments",

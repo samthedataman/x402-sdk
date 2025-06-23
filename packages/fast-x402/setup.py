@@ -14,7 +14,7 @@ def read_requirements(filename):
 
 setup(
     name="fast-x402",
-    version="1.1.0",
+    version="1.2.0",
     author="x402 Team",
     author_email="support@x402.org",
     description="Lightning-fast x402 payment integration for FastAPI and modern Python web frameworks",
