@@ -12,8 +12,16 @@ from mnemonic import Mnemonic
 class WalletManager:
     """Manages wallet creation and storage for x402 payments"""
     
-    def __init__(self, wallet_dir: Optional[str] = None):
-        self.wallet_dir = Path(wallet_dir or os.path.expanduser("~/.x402/wallets"))
+    def __init__(self, wallet_dir: Optional[str] = None, storage_dir: Optional[str] = None):
+        # Support both wallet_dir and storage_dir for backward compatibility
+        # storage_dir takes precedence if both are provided
+        if storage_dir is not None:
+            self.wallet_dir = Path(storage_dir)
+        elif wallet_dir is not None:
+            self.wallet_dir = Path(wallet_dir)
+        else:
+            self.wallet_dir = Path(os.path.expanduser("~/.x402/wallets"))
+        
         self.wallet_dir.mkdir(parents=True, exist_ok=True)
         
     def create_wallet(self, name: str = "default") -> Dict[str, str]:

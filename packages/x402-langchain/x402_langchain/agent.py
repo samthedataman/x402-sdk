@@ -3,7 +3,7 @@
 from typing import Optional, List, Any, Dict
 from langchain.agents import AgentExecutor
 from langchain.tools import BaseTool
-from langchain.schema import BaseLanguageModel
+from langchain.base_language import BaseLanguageModel
 
 from .tools import X402PaymentTool, create_x402_tool
 from .config import X402Config

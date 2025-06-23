@@ -62,7 +62,7 @@ class RouteConfig(BaseModel):
 
 class X402Config(BaseModel):
     """Main configuration for X402Provider"""
-    wallet_address: str
+    wallet_address: Optional[str] = None
     chain_id: int = 8453  # Base mainnet
     accepted_tokens: List[str] = Field(
         default_factory=lambda: ["0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"]  # USDC
@@ -73,6 +73,7 @@ class X402Config(BaseModel):
     analytics_enabled: bool = True
     analytics_webhook: Optional[str] = None
     custom_validation: Optional[Any] = None  # Callable in runtime
+    mode: str = Field(default="production", description="Operating mode: production, development, or testing")
     
     class Config:
         arbitrary_types_allowed = True

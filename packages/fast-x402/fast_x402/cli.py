@@ -107,8 +107,11 @@ X402_CHAIN_ID={config['chain_id']}
         with open('.env', 'w') as f:
             f.write(env_content)
         
-        # Save config file
-        with open('.x402.config.json', 'w') as f:
+        # Create .x402 directory and save config file
+        x402_dir = Path('.x402')
+        x402_dir.mkdir(exist_ok=True)
+        
+        with open(x402_dir / 'config.json', 'w') as f:
             json.dump({
                 "wallet_address": config['wallet_address'],
                 "network": network,
@@ -296,11 +299,17 @@ def test(count: int, amount: float, endpoint: str):
     console.print(f"\n🧪 Testing x402 payments: [bold]{count}[/] requests to [cyan]{endpoint}[/]\n")
     
     # Load config
-    if not Path('.x402.config.json').exists():
-        console.print("[red]Error: No x402 configuration found. Run 'x402 create' first.[/]")
-        sys.exit(1)
+    config_path = Path('.x402/config.json')
+    if not config_path.exists():
+        # Fallback to old location for backward compatibility
+        old_config_path = Path('.x402.config.json')
+        if old_config_path.exists():
+            config_path = old_config_path
+        else:
+            console.print("[red]Error: No x402 configuration found. Run 'x402 create' first.[/]")
+            sys.exit(1)
     
-    with open('.x402.config.json') as f:
+    with open(config_path) as f:
         config_data = json.load(f)
     
     # Create test agents

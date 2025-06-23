@@ -49,6 +49,9 @@ class X402Config(BaseModel):
     log_payments: bool = Field(default=True, description="Log all payment attempts")
     webhook_url: Optional[str] = Field(None, description="Webhook for payment notifications")
     
+    # Operating mode
+    mode: str = Field(default="production", description="Operating mode: production, development, or testing")
+    
     class Config:
         arbitrary_types_allowed = True
         json_schema_extra = {

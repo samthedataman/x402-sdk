@@ -102,16 +102,24 @@ class AnalyticsBackend:
         event_type = event["type"]
         
         if event_type == AnalyticsEvent.PAYMENT_COMPLETED.value:
+            # Convert amount to float if it's a string
+            amount = event.get("amount", 0)
+            if isinstance(amount, str):
+                try:
+                    amount = float(amount)
+                except (ValueError, TypeError):
+                    amount = 0.0
+            
             self.metrics["total_payments"] += 1
-            self.metrics["total_revenue"] += event.get("amount", 0)
+            self.metrics["total_revenue"] += amount
             
             if event.get("wallet_address"):
                 self.metrics["unique_wallets"].add(event["wallet_address"])
-                self.metrics["revenue_by_wallet"][event["wallet_address"]] += event.get("amount", 0)
+                self.metrics["revenue_by_wallet"][event["wallet_address"]] += amount
                 
             if event.get("provider_address"):
                 self.metrics["unique_providers"].add(event["provider_address"])
-                self.metrics["revenue_by_provider"][event["provider_address"]] += event.get("amount", 0)
+                self.metrics["revenue_by_provider"][event["provider_address"]] += amount
                 
             # Track hourly patterns
             hour = datetime.fromtimestamp(event["timestamp"]).hour

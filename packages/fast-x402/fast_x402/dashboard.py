@@ -27,11 +27,19 @@ class X402Dashboard:
     async def track_payment(self, payment_data: Dict[str, Any]):
         """Track a payment in the dashboard"""
         
+        # Convert amount to float if it's a string
+        amount = payment_data.get("amount", 0)
+        if isinstance(amount, str):
+            try:
+                amount = float(amount)
+            except (ValueError, TypeError):
+                amount = 0.0
+        
         event = {
             "id": secrets.token_hex(8),
             "timestamp": datetime.utcnow().isoformat(),
             "from_address": payment_data.get("from_address", "Unknown"),
-            "amount": payment_data.get("amount", 0),
+            "amount": amount,
             "token": payment_data.get("token", "USDC"),
             "endpoint": payment_data.get("endpoint", "/unknown"),
             "status": payment_data.get("status", "completed"),
@@ -65,7 +73,17 @@ class X402Dashboard:
     def get_stats(self) -> Dict[str, Any]:
         """Get current dashboard statistics"""
         
-        total_revenue = sum(p["amount"] for p in self.payment_history)
+        # Safely calculate total revenue, handling string amounts
+        total_revenue = 0.0
+        for p in self.payment_history:
+            amount = p["amount"]
+            if isinstance(amount, str):
+                try:
+                    amount = float(amount)
+                except (ValueError, TypeError):
+                    amount = 0.0
+            total_revenue += amount
+        
         total_payments = len(self.payment_history)
         
         # Calculate revenue by hour for chart
@@ -83,7 +101,13 @@ class X402Dashboard:
         # Get top payers
         payer_revenue = defaultdict(float)
         for payment in self.payment_history:
-            payer_revenue[payment["from_address"][:10]] += payment["amount"]
+            amount = payment["amount"]
+            if isinstance(amount, str):
+                try:
+                    amount = float(amount)
+                except (ValueError, TypeError):
+                    amount = 0.0
+            payer_revenue[payment["from_address"][:10]] += amount
         
         top_payers = sorted(
             payer_revenue.items(),
@@ -94,7 +118,13 @@ class X402Dashboard:
         # Get endpoint breakdown
         endpoint_revenue = defaultdict(float)
         for payment in self.payment_history:
-            endpoint_revenue[payment["endpoint"]] += payment["amount"]
+            amount = payment["amount"]
+            if isinstance(amount, str):
+                try:
+                    amount = float(amount)
+                except (ValueError, TypeError):
+                    amount = 0.0
+            endpoint_revenue[payment["endpoint"]] += amount
         
         return {
             "total_revenue": total_revenue,
@@ -417,7 +447,7 @@ class X402Dashboard:
             item.className = 'payment-item';
             item.innerHTML = `
                 <div>
-                    <div class="payment-amount">$${payment.amount.toFixed(2)} ${payment.token}</div>
+                    <div class="payment-amount">$${(typeof payment.amount === 'string' ? parseFloat(payment.amount) : payment.amount).toFixed(2)} ${payment.token}</div>
                     <div class="payment-address">${payment.from_address.substring(0, 10)}...</div>
                 </div>
                 <div>
