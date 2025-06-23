@@ -265,6 +265,276 @@ NETWORK_CONFIGS = {
         explorer_url="https://evm.evmos.org"
     ),
     
+    # Additional Major Networks
+    "moonriver": NetworkInfo(
+        name="Moonriver",
+        chain_id=1285,
+        chain_type=ChainType.EVM,
+        native_currency="MOVR",
+        rpc_urls=[
+            "https://rpc.api.moonriver.moonbeam.network",
+            "https://moonriver.publicnode.com",
+        ],
+        explorer_url="https://moonriver.moonscan.io"
+    ),
+    
+    "metis": NetworkInfo(
+        name="Metis Andromeda",
+        chain_id=1088,
+        chain_type=ChainType.EVM,
+        native_currency="METIS",
+        rpc_urls=[
+            "https://andromeda.metis.io/?owner=1088",
+            "https://metis-mainnet.public.blastapi.io",
+        ],
+        explorer_url="https://andromeda-explorer.metis.io"
+    ),
+    
+    "boba": NetworkInfo(
+        name="Boba Network",
+        chain_id=288,
+        chain_type=ChainType.EVM,
+        native_currency="ETH",
+        rpc_urls=[
+            "https://mainnet.boba.network",
+            "https://boba-mainnet.gateway.pokt.network/v1/lb/623ad21b20354900396fed7f",
+        ],
+        explorer_url="https://blockexplorer.boba.network"
+    ),
+    
+    "okexchain": NetworkInfo(
+        name="OKExChain",
+        chain_id=66,
+        chain_type=ChainType.EVM,
+        native_currency="OKT",
+        rpc_urls=[
+            "https://exchainrpc.okex.org",
+        ],
+        explorer_url="https://www.oklink.com/okexchain"
+    ),
+    
+    "heco": NetworkInfo(
+        name="Huobi ECO Chain",
+        chain_id=128,
+        chain_type=ChainType.EVM,
+        native_currency="HT",
+        rpc_urls=[
+            "https://http-mainnet.hecochain.com",
+        ],
+        explorer_url="https://hecoinfo.com"
+    ),
+    
+    "kcc": NetworkInfo(
+        name="KuCoin Community Chain",
+        chain_id=321,
+        chain_type=ChainType.EVM,
+        native_currency="KCS",
+        rpc_urls=[
+            "https://rpc-mainnet.kcc.network",
+        ],
+        explorer_url="https://explorer.kcc.io"
+    ),
+    
+    "velas": NetworkInfo(
+        name="Velas EVM",
+        chain_id=106,
+        chain_type=ChainType.EVM,
+        native_currency="VLX",
+        rpc_urls=[
+            "https://evmexplorer.velas.com/rpc",
+        ],
+        explorer_url="https://evmexplorer.velas.com"
+    ),
+    
+    "oasis": NetworkInfo(
+        name="Oasis Emerald",
+        chain_id=42262,
+        chain_type=ChainType.EVM,
+        native_currency="ROSE",
+        rpc_urls=[
+            "https://emerald.oasis.dev",
+        ],
+        explorer_url="https://explorer.emerald.oasis.dev"
+    ),
+    
+    "telos": NetworkInfo(
+        name="Telos EVM",
+        chain_id=40,
+        chain_type=ChainType.EVM,
+        native_currency="TLOS",
+        rpc_urls=[
+            "https://mainnet.telos.net/evm",
+        ],
+        explorer_url="https://www.teloscan.io"
+    ),
+    
+    "dfk": NetworkInfo(
+        name="DeFi Kingdoms",
+        chain_id=53935,
+        chain_type=ChainType.EVM,
+        native_currency="JEWEL",
+        rpc_urls=[
+            "https://subnets.avax.network/defi-kingdoms/dfk-chain/rpc",
+        ],
+        explorer_url="https://subnets.avax.network/defi-kingdoms"
+    ),
+    
+    "klaytn": NetworkInfo(
+        name="Klaytn",
+        chain_id=8217,
+        chain_type=ChainType.EVM,
+        native_currency="KLAY",
+        rpc_urls=[
+            "https://klaytn-mainnet-rpc.allthatnode.com:8551",
+            "https://public-node-api.klaytnapi.com/v1/cypress",
+        ],
+        explorer_url="https://scope.klaytn.com"
+    ),
+    
+    "iotex": NetworkInfo(
+        name="IoTeX",
+        chain_id=4689,
+        chain_type=ChainType.EVM,
+        native_currency="IOTX",
+        rpc_urls=[
+            "https://babel-api.mainnet.iotex.io",
+        ],
+        explorer_url="https://iotexscan.io"
+    ),
+    
+    "thundercore": NetworkInfo(
+        name="ThunderCore",
+        chain_id=108,
+        chain_type=ChainType.EVM,
+        native_currency="TT",
+        rpc_urls=[
+            "https://mainnet-rpc.thundercore.com",
+        ],
+        explorer_url="https://scan.thundercore.com"
+    ),
+    
+    "arbitrum-nova": NetworkInfo(
+        name="Arbitrum Nova",
+        chain_id=42170,
+        chain_type=ChainType.EVM,
+        native_currency="ETH",
+        rpc_urls=[
+            "https://nova.arbitrum.io/rpc",
+        ],
+        explorer_url="https://nova.arbiscan.io"
+    ),
+    
+    "canto": NetworkInfo(
+        name="Canto",
+        chain_id=7700,
+        chain_type=ChainType.EVM,
+        native_currency="CANTO",
+        rpc_urls=[
+            "https://canto.gravitychain.io",
+        ],
+        explorer_url="https://evm.explorer.canto.io"
+    ),
+    
+    "meter": NetworkInfo(
+        name="Meter",
+        chain_id=82,
+        chain_type=ChainType.EVM,
+        native_currency="MTR",
+        rpc_urls=[
+            "https://rpc.meter.io",
+        ],
+        explorer_url="https://scan.meter.io"
+    ),
+    
+    "manta": NetworkInfo(
+        name="Manta Pacific",
+        chain_id=169,
+        chain_type=ChainType.EVM,
+        native_currency="ETH",
+        rpc_urls=[
+            "https://pacific-rpc.manta.network/http",
+        ],
+        explorer_url="https://pacific-explorer.manta.network"
+    ),
+    
+    "blast": NetworkInfo(
+        name="Blast",
+        chain_id=81457,
+        chain_type=ChainType.EVM,
+        native_currency="ETH",
+        rpc_urls=[
+            "https://rpc.blast.io",
+        ],
+        explorer_url="https://blastscan.io"
+    ),
+    
+    "mantle": NetworkInfo(
+        name="Mantle",
+        chain_id=5000,
+        chain_type=ChainType.EVM,
+        native_currency="MNT",
+        rpc_urls=[
+            "https://rpc.mantle.xyz",
+        ],
+        explorer_url="https://explorer.mantle.xyz"
+    ),
+    
+    "polygonzkevm": NetworkInfo(
+        name="Polygon zkEVM",
+        chain_id=1101,
+        chain_type=ChainType.EVM,
+        native_currency="ETH",
+        rpc_urls=[
+            "https://zkevm-rpc.com",
+            "https://polygon-zkevm.publicnode.com",
+        ],
+        explorer_url="https://zkevm.polygonscan.com"
+    ),
+    
+    "sonic": NetworkInfo(
+        name="Sonic",
+        chain_id=146,
+        chain_type=ChainType.EVM,
+        native_currency="S",
+        rpc_urls=[
+            "https://rpc.soniclabs.com",
+        ],
+        explorer_url="https://explorer.soniclabs.com"
+    ),
+    
+    "berachain": NetworkInfo(
+        name="Berachain",
+        chain_id=80085,
+        chain_type=ChainType.EVM,
+        native_currency="BERA",
+        rpc_urls=[
+            "https://rpc.berachain.com",
+        ],
+        explorer_url="https://explorer.berachain.com"
+    ),
+    
+    "fraxtal": NetworkInfo(
+        name="Fraxtal",
+        chain_id=252,
+        chain_type=ChainType.EVM,
+        native_currency="frxETH",
+        rpc_urls=[
+            "https://rpc.frax.com",
+        ],
+        explorer_url="https://fraxscan.com"
+    ),
+    
+    "opbnb": NetworkInfo(
+        name="opBNB",
+        chain_id=204,
+        chain_type=ChainType.EVM,
+        native_currency="BNB",
+        rpc_urls=[
+            "https://opbnb-mainnet-rpc.bnbchain.org",
+        ],
+        explorer_url="https://opbnbscan.com"
+    ),
+    
     # Layer 2 Solutions
     "zksync": NetworkInfo(
         name="zkSync Era",
@@ -368,6 +638,95 @@ NETWORK_CONFIGS = {
             "https://api.metaplex.solana.com",
         ],
         explorer_url="https://explorer.solana.com"
+    ),
+    
+    "algorand": NetworkInfo(
+        name="Algorand",
+        chain_id=0,  # Algorand uses different ID system
+        chain_type=ChainType.SUBSTRATE,  # Using substrate as generic non-EVM
+        native_currency="ALGO",
+        rpc_urls=[
+            "https://mainnet-api.algonode.cloud",
+            "https://node.algoexplorerapi.io",
+        ],
+        explorer_url="https://algoexplorer.io"
+    ),
+    
+    "aptos": NetworkInfo(
+        name="Aptos",
+        chain_id=1,  # Aptos uses different ID system
+        chain_type=ChainType.SUBSTRATE,
+        native_currency="APT",
+        rpc_urls=[
+            "https://fullnode.mainnet.aptoslabs.com/v1",
+        ],
+        explorer_url="https://explorer.aptoslabs.com"
+    ),
+    
+    "sui": NetworkInfo(
+        name="Sui",
+        chain_id=1,  # Sui uses different ID system
+        chain_type=ChainType.SUBSTRATE,
+        native_currency="SUI",
+        rpc_urls=[
+            "https://fullnode.mainnet.sui.io:443",
+        ],
+        explorer_url="https://explorer.sui.io"
+    ),
+    
+    "hedera": NetworkInfo(
+        name="Hedera",
+        chain_id=295,
+        chain_type=ChainType.EVM,
+        native_currency="HBAR",
+        rpc_urls=[
+            "https://mainnet.hashio.io/api",
+        ],
+        explorer_url="https://hashscan.io"
+    ),
+    
+    "injective": NetworkInfo(
+        name="Injective",
+        chain_id=1,  # Cosmos-based
+        chain_type=ChainType.COSMOS,
+        native_currency="INJ",
+        rpc_urls=[
+            "https://sentry.chain.grpc-web.injective.network:443",
+        ],
+        explorer_url="https://explorer.injective.network"
+    ),
+    
+    "osmosis": NetworkInfo(
+        name="Osmosis",
+        chain_id=1,  # Cosmos-based
+        chain_type=ChainType.COSMOS,
+        native_currency="OSMO",
+        rpc_urls=[
+            "https://rpc.osmosis.zone",
+        ],
+        explorer_url="https://www.mintscan.io/osmosis"
+    ),
+    
+    "neutron": NetworkInfo(
+        name="Neutron",
+        chain_id=1,  # Cosmos-based
+        chain_type=ChainType.COSMOS,
+        native_currency="NTRN",
+        rpc_urls=[
+            "https://rpc.novel.remedy.tm.p2p.org",
+        ],
+        explorer_url="https://www.mintscan.io/neutron"
+    ),
+    
+    "tron": NetworkInfo(
+        name="Tron",
+        chain_id=1,  # Tron uses different ID system
+        chain_type=ChainType.SUBSTRATE,  # Using as generic non-EVM
+        native_currency="TRX",
+        rpc_urls=[
+            "https://api.trongrid.io",
+        ],
+        explorer_url="https://tronscan.org"
     ),
     
     "solana-devnet": NetworkInfo(

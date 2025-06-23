@@ -224,6 +224,244 @@ ENHANCED_TOKEN_CONFIGS = {
         },
     },
     
+    # Additional EVM Networks
+    "moonriver": {
+        "USDC": {
+            "address": "0xE3F5a90F9cb311505cd691a46596599aA1A0AD7D",
+            "decimals": 6,
+            "eip712": {"name": "USD Coin", "version": "2"},
+        },
+        "USDT": {
+            "address": "0xB44a9B6905aF7c801311e8F4E76932ee959c663C",
+            "decimals": 6,
+            "eip712": {"name": "Tether USD", "version": "1"},
+        },
+    },
+    
+    "cronos": {
+        "USDC": {
+            "address": "0xc21223249CA28397B4B6541dfFaEcC539BfF0c59",
+            "decimals": 6,
+            "eip712": {"name": "USD Coin", "version": "2"},
+        },
+        "USDT": {
+            "address": "0x66e428c3f67a68878562e79A0234c1F83c208770",
+            "decimals": 6,
+            "eip712": {"name": "Tether USD", "version": "1"},
+        },
+    },
+    
+    "gnosis": {
+        "USDC": {
+            "address": "0xDDAfbb505ad214D7b80b1f830fcCc89B60fb7A83",
+            "decimals": 6,
+            "eip712": {"name": "USD Coin", "version": "2"},
+        },
+        "USDT": {
+            "address": "0x4ECaBa5870353805a9F068101A40E0f32ed605C6",
+            "decimals": 6,
+            "eip712": {"name": "Tether USD", "version": "1"},
+        },
+    },
+    
+    "celo": {
+        "USDC": {
+            "address": "0xcebA9300f2b948710d2653dD7B07f33A8B32118C",
+            "decimals": 6,
+            "eip712": {"name": "USD Coin", "version": "2"},
+        },
+        "USDT": {
+            "address": "0x48065fbBE25f71C9282ddf5e1cD6D6A887483D5e",
+            "decimals": 6,
+            "eip712": {"name": "Tether USD", "version": "1"},
+        },
+    },
+    
+    "moonbeam": {
+        "USDC": {
+            "address": "0x818ec0A7Fe18Ff94269904fCED6AE3DaE6d6dC0b",
+            "decimals": 6,
+            "eip712": {"name": "USD Coin", "version": "2"},
+        },
+        "USDT": {
+            "address": "0xeFAeeE334F0Fd1712f9a8cc375f427D9Cdd40d73",
+            "decimals": 6,
+            "eip712": {"name": "Tether USD", "version": "1"},
+        },
+    },
+    
+    "aurora": {
+        "USDC": {
+            "address": "0xB12BFcA5A55806AaF64E99521918A4bf0fC40802",
+            "decimals": 6,
+            "eip712": {"name": "USD Coin", "version": "2"},
+        },
+        "USDT": {
+            "address": "0x4988a896b1227218e4A686fdE5EabdcAbd91571f",
+            "decimals": 6,
+            "eip712": {"name": "Tether USD", "version": "1"},
+        },
+    },
+    
+    "harmony": {
+        "USDC": {
+            "address": "0x985458E523dB3d53125813eD68c274899e9DfAb4",
+            "decimals": 6,
+            "eip712": {"name": "USD Coin", "version": "2"},
+        },
+        "USDT": {
+            "address": "0x3C2B8Be99c50593081EAA2A724F0B8285F5aba8f",
+            "decimals": 6,
+            "eip712": {"name": "Tether USD", "version": "1"},
+        },
+    },
+    
+    "kava": {
+        "USDC": {
+            "address": "0xfA9343C3897324496A05fC75abeD6bAC29f8A40f",
+            "decimals": 6,
+            "eip712": {"name": "USD Coin", "version": "2"},
+        },
+        "USDT": {
+            "address": "0x919C1c267BC06a7039e03fcc2eF738525769109c",
+            "decimals": 6,
+            "eip712": {"name": "Tether USD", "version": "1"},
+        },
+    },
+    
+    "evmos": {
+        "USDC": {
+            "address": "0x51e44FfaD5C2B122C8b635671FCC8139dc636E82",
+            "decimals": 6,
+            "eip712": {"name": "USD Coin", "version": "2"},
+        },
+    },
+    
+    "klaytn": {
+        "USDC": {
+            "address": "0x754288077D0fF82AF7a5317C7CB8c444D421d103",
+            "decimals": 6,
+            "eip712": {"name": "USD Coin", "version": "2"},
+        },
+        "USDT": {
+            "address": "0xcee8faf64bb97a73bb51e115aa89c17ffa8dd167",
+            "decimals": 6,
+            "eip712": {"name": "Tether USD", "version": "1"},
+        },
+    },
+    
+    "linea": {
+        "USDC": {
+            "address": "0x176211869cA2b568f2A7D4EE941E073a821EE1ff",
+            "decimals": 6,
+            "eip712": {"name": "USD Coin", "version": "2"},
+        },
+        "USDT": {
+            "address": "0xA219439259ca2f20F0Fc4adE23Dc1dBb81e3dAb4",
+            "decimals": 6,
+            "eip712": {"name": "Tether USD", "version": "1"},
+        },
+    },
+    
+    "scroll": {
+        "USDC": {
+            "address": "0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4",
+            "decimals": 6,
+            "eip712": {"name": "USD Coin", "version": "2"},
+        },
+        "USDT": {
+            "address": "0xf55BEC9cafDbE8730f096Aa55dad6D22d44099Df",
+            "decimals": 6,
+            "eip712": {"name": "Tether USD", "version": "1"},
+        },
+    },
+    
+    "zksync": {
+        "USDC": {
+            "address": "0x3355df6D4c9C3035724Fd0e3914dE96A5a83aaf4",
+            "decimals": 6,
+            "eip712": {"name": "USD Coin", "version": "2"},
+        },
+        "USDT": {
+            "address": "0x493257fD37EDB34451f62EDf8D2a0C418852bA4C",
+            "decimals": 6,
+            "eip712": {"name": "Tether USD", "version": "1"},
+        },
+    },
+    
+    "polygonzkevm": {
+        "USDC": {
+            "address": "0xA8CE8aee21bC2A48a5EF670afCc9274C7bbbC035",
+            "decimals": 6,
+            "eip712": {"name": "USD Coin", "version": "2"},
+        },
+        "USDT": {
+            "address": "0x1E4a5963aBFD975d8c9021ce480b42188849D41d",
+            "decimals": 6,
+            "eip712": {"name": "Tether USD", "version": "1"},
+        },
+    },
+    
+    "mantle": {
+        "USDC": {
+            "address": "0x09Bc4E0D864854c6aFB6eB9A9cdF58aC190D0dF9",
+            "decimals": 6,
+            "eip712": {"name": "USD Coin", "version": "2"},
+        },
+        "USDT": {
+            "address": "0x201EBa5CC46D216Ce6DC03F6a759e8E766e956aE",
+            "decimals": 6,
+            "eip712": {"name": "Tether USD", "version": "1"},
+        },
+    },
+    
+    "arbitrum-nova": {
+        "USDC": {
+            "address": "0x750ba8b76187092B0D1E87E28daaf484d1b5273b",
+            "decimals": 6,
+            "eip712": {"name": "USD Coin", "version": "2"},
+        },
+    },
+    
+    "blast": {
+        "USDC": {
+            "address": "0x4300000000000000000000000000000000000003",
+            "decimals": 6,
+            "eip712": {"name": "USD Coin", "version": "2"},
+        },
+        "USDT": {
+            "address": "0x4300000000000000000000000000000000000004",
+            "decimals": 6,
+            "eip712": {"name": "Tether USD", "version": "1"},
+        },
+    },
+    
+    "manta": {
+        "USDC": {
+            "address": "0xb73603C5d87fA094B7314C74ACE2e64D165016fb",
+            "decimals": 6,
+            "eip712": {"name": "USD Coin", "version": "2"},
+        },
+        "USDT": {
+            "address": "0xf417F5A458eC102B90352F697D6e2Ac3A3d2851f",
+            "decimals": 6,
+            "eip712": {"name": "Tether USD", "version": "1"},
+        },
+    },
+    
+    "opbnb": {
+        "USDC": {
+            "address": "0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3",
+            "decimals": 18,
+            "eip712": {"name": "USD Coin", "version": "2"},
+        },
+        "USDT": {
+            "address": "0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7",
+            "decimals": 18,
+            "eip712": {"name": "Tether USD", "version": "1"},
+        },
+    },
+    
     # Local development
     "local": {
         "MOCK": {
@@ -236,6 +474,7 @@ ENHANCED_TOKEN_CONFIGS = {
 
 # Facilitator service configurations
 FACILITATOR_CONFIGS = {
+    # Major EVM Networks
     "ethereum": "https://x402-facilitator.ethereum.org",
     "polygon": "https://x402-facilitator.polygon.com",
     "arbitrum": "https://x402-facilitator.arbitrum.io",
@@ -244,14 +483,60 @@ FACILITATOR_CONFIGS = {
     "avalanche": "https://x402-facilitator.avax.network",
     "bsc": "https://x402-facilitator.bnbchain.org",
     "fantom": "https://x402-facilitator.fantom.foundation",
+    "cronos": "https://x402-facilitator.cronos.org",
+    "moonbeam": "https://x402-facilitator.moonbeam.network",
+    "moonriver": "https://x402-facilitator.moonriver.network",
+    "gnosis": "https://x402-facilitator.gnosis.io",
+    "celo": "https://x402-facilitator.celo.org",
+    "aurora": "https://x402-facilitator.aurora.dev",
+    "harmony": "https://x402-facilitator.harmony.one",
+    "kava": "https://x402-facilitator.kava.io",
+    "evmos": "https://x402-facilitator.evmos.org",
+    "klaytn": "https://x402-facilitator.klaytn.foundation",
+    "iotex": "https://x402-facilitator.iotex.io",
+    "thundercore": "https://x402-facilitator.thundercore.com",
+    "metis": "https://x402-facilitator.metis.io",
+    "boba": "https://x402-facilitator.boba.network",
+    "okexchain": "https://x402-facilitator.okex.org",
+    "heco": "https://x402-facilitator.hecochain.com",
+    "kcc": "https://x402-facilitator.kcc.network",
+    "velas": "https://x402-facilitator.velas.com",
+    "oasis": "https://x402-facilitator.oasis.dev",
+    "telos": "https://x402-facilitator.telos.net",
+    "dfk": "https://x402-facilitator.defikingdoms.com",
+    "meter": "https://x402-facilitator.meter.io",
+    "canto": "https://x402-facilitator.canto.io",
+    "arbitrum-nova": "https://x402-facilitator.arbitrum-nova.io",
+    
+    # Layer 2 Solutions
+    "zksync": "https://x402-facilitator.zksync.io",
+    "polygon-zkevm": "https://x402-facilitator.polygon-zkevm.com",
+    "polygonzkevm": "https://x402-facilitator.polygon-zkevm.com",
+    "linea": "https://x402-facilitator.linea.build",
+    "scroll": "https://x402-facilitator.scroll.io",
+    "mantle": "https://x402-facilitator.mantle.xyz",
+    "blast": "https://x402-facilitator.blast.io",
+    "manta": "https://x402-facilitator.manta.network",
+    "opbnb": "https://x402-facilitator.opbnb.com",
+    "sonic": "https://x402-facilitator.soniclabs.com",
+    "berachain": "https://x402-facilitator.berachain.com",
+    "fraxtal": "https://x402-facilitator.frax.com",
+    
+    # Non-EVM Networks
+    "solana": "https://x402-facilitator.solana.com",
+    "algorand": "https://x402-facilitator.algorand.foundation",
+    "aptos": "https://x402-facilitator.aptoslabs.com",
+    "sui": "https://x402-facilitator.sui.io",
+    "hedera": "https://x402-facilitator.hedera.com",
+    "injective": "https://x402-facilitator.injective.network",
+    "osmosis": "https://x402-facilitator.osmosis.zone",
+    "neutron": "https://x402-facilitator.neutron.org",
+    "tron": "https://x402-facilitator.tron.network",
     
     # Testnets
     "base-sepolia": "https://api.coinbase.com/rpc/v1/base-sepolia/x402",
     "goerli": "https://x402-facilitator-goerli.ethereum.org",
     "sepolia": "https://x402-facilitator-sepolia.ethereum.org",
-    
-    # Solana
-    "solana": "https://x402-facilitator.solana.com",
     "solana-devnet": "https://x402-facilitator-devnet.solana.com",
     
     # Local
