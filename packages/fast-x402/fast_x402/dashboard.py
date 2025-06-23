@@ -138,6 +138,24 @@ class X402Dashboard:
             "network": getattr(self.provider.config, "network", "unknown"),
         }
     
+    def get_analytics(self) -> Dict[str, Any]:
+        """Get analytics data compatible with the expected interface"""
+        
+        stats = self.get_stats()
+        
+        return {
+            "total_payments": stats["total_payments"],
+            "total_revenue": stats["total_revenue"],
+            "average_payment": stats["average_payment"],
+            "conversion_rate": 1.0 if stats["total_payments"] > 0 else 0.0,
+            "top_payers": stats["top_payers"],
+            "endpoint_breakdown": stats["endpoint_breakdown"],
+            "hourly_data": stats["hourly_data"],
+            "uptime_seconds": stats["uptime"],
+            "wallet_address": stats["wallet_address"],
+            "network": stats["network"],
+        }
+    
     def create_app(self, port: int = 3001) -> FastAPI:
         """Create the dashboard FastAPI app"""
         

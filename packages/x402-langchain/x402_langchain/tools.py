@@ -29,8 +29,8 @@ class X402PaymentInput(BaseModel):
 class X402PaymentTool(BaseTool):
     """Tool for making x402 payments to access paid resources"""
     
-    name = "x402_payment"
-    description = """Pay for and access x402-enabled resources.
+    name: str = "x402_payment"
+    description: str = """Pay for and access x402-enabled resources.
     Use this tool when you need to access APIs or resources that require payment.
     The tool will automatically handle the payment process and return the requested data.
     """

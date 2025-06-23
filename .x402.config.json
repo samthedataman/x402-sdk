@@ -1,0 +1,8 @@
+{
+  "chain_id": 84532,
+  "accepted_tokens": [
+    "USDC"
+  ],
+  "network": "base-sepolia",
+  "facilitator_url": "https://api.coinbase.com/rpc/v1/base-sepolia/x402"
+}

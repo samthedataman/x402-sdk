@@ -48,6 +48,42 @@ class APIMockingEngine:
         
         logger.info(f"🎭 Mocked API: {url_pattern} (${cost})")
     
+    def call_api(self, url: str) -> Optional[Any]:
+        """Call a mocked API and return response"""
+        
+        # Find matching mock
+        mock = None
+        for pattern, api in self.mocked_apis.items():
+            if self._match_pattern(pattern, url):
+                mock = api
+                break
+        
+        if not mock:
+            return None
+        
+        # Generate response
+        if callable(mock.response):
+            # Extract parameter from URL if needed
+            parts = url.split("/")
+            param = parts[-1] if parts else None
+            response_data = mock.response(param)
+        else:
+            response_data = mock.response
+        
+        # Track the call
+        self.call_history.append({
+            "url": url,
+            "cost": mock.cost,
+            "timestamp": time.time(),
+            "success": True,
+        })
+        
+        self.total_mock_spend += mock.cost
+        
+        logger.debug(f"🎭 Mock response for {url}: ${mock.cost}")
+        
+        return response_data
+    
     def mock_common_apis(self):
         """Mock common API patterns for testing"""
         
@@ -214,6 +250,18 @@ class CostDiscoveryTool:
     def __init__(self):
         self.discovered_costs: Dict[str, float] = {}
         self.cost_history = []
+    
+    def add_known_cost(self, url: str, cost: float):
+        """Add a known cost for an API"""
+        
+        self.discovered_costs[url] = cost
+        self.cost_history.append({
+            "url": url,
+            "cost": cost,
+            "discovered_at": time.time(),
+        })
+        
+        logger.info(f"💰 Added known cost for {url}: ${cost}")
         
     async def discover_cost(self, url: str) -> Optional[float]:
         """Discover the cost of an API without paying"""

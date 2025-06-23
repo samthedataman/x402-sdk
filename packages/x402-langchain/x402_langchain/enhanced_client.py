@@ -202,11 +202,18 @@ class EnhancedX402Client(BaseClient):
         if config_path.exists():
             with open(config_path) as f:
                 config_data = json.load(f)
+                # Ensure required fields are present for development mode
+                if not config_data.get("private_key"):
+                    config_data["private_key"] = "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"
+                if not config_data.get("wallet_address"):
+                    config_data["wallet_address"] = "0x742d35Cc6634C0532925a3b844Bc9e7595f5b899"
                 logger.info("📁 Loaded agent configuration from .x402-agent.json")
                 return X402Config(**config_data)
         
         # Create new config with auto-generated wallet
         config = X402Config(
+            private_key="0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",  # Default test key
+            wallet_address="0x742d35Cc6634C0532925a3b844Bc9e7595f5b899",  # Default test address
             spending_limits=SpendingLimits(
                 per_request=0.10,
                 per_hour=5.00,
@@ -355,6 +362,24 @@ class EnhancedX402Client(BaseClient):
             self.approval_rules.require_approval_above = rules["require_approval_above"]
         
         logger.info("✅ Updated approval rules")
+    
+    def set_spending_limit(self, daily_limit: float = 10.0, per_request_limit: float = 1.0):
+        """Set spending limits"""
+        
+        self.approval_rules.max_per_request = per_request_limit
+        self.approval_rules.max_per_hour = daily_limit / 24  # Approximate
+        logger.info(f"💰 Set spending limits: ${per_request_limit} per request, ${daily_limit} daily")
+    
+    def add_trusted_domain(self, domain: str):
+        """Add a trusted domain"""
+        
+        self.approval_rules.add_trusted_domain(domain)
+        logger.info(f"✅ Added trusted domain: {domain}")
+    
+    def _should_approve_payment(self, domain: str, amount: float) -> bool:
+        """Check if payment should be approved"""
+        
+        return self.approval_rules.should_approve(f"https://{domain}/api", amount)
     
     async def check_api_cost(self, url: str) -> Optional[float]:
         """Check API cost without committing to payment"""

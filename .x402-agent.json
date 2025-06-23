@@ -1,0 +1,9 @@
+{
+  "wallet_address": null,
+  "spending_limits": {
+    "per_request": 0.1,
+    "per_hour": 5.0,
+    "per_day": 20.0
+  },
+  "auto_approve": false
+}

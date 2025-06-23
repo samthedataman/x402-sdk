@@ -20,7 +20,7 @@ class X402Config(BaseModel):
     """Configuration for x402 AI agent payments"""
     
     # Wallet configuration
-    private_key: str = Field(..., description="Agent's private key for signing payments")
+    private_key: Optional[str] = Field(None, description="Agent's private key for signing payments")
     wallet_address: Optional[str] = Field(None, description="Derived from private key if not provided")
     
     # Network configuration

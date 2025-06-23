@@ -1,0 +1,13 @@
+{
+  "wallet_address": "0x48e8CffBfd0d1950eA20D625fF2FE92c193EaEcB",
+  "network": "base-sepolia",
+  "chain_id": 84532,
+  "accepted_tokens": [
+    "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
+  ],
+  "facilitator_url": "https://api.coinbase.com/rpc/v1/base-sepolia/x402",
+  "dashboard": {
+    "enabled": true,
+    "port": 3001
+  }
+}

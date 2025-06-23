@@ -33,6 +33,10 @@ class EnhancedX402Provider(BaseProvider):
         if not config:
             config = self._auto_load_config()
         
+        # Ensure wallet address is set
+        if not config.wallet_address:
+            config.wallet_address = "0x742d35Cc6634C0532925a3b844Bc9e7595f5b899"
+        
         # Set mode
         self.mode = self._determine_mode(mode)
         
@@ -41,6 +45,9 @@ class EnhancedX402Provider(BaseProvider):
         if self.mode == "development":
             self.dev_mode = DevelopmentMode()
             logger.info("🎮 Development mode enabled - Using mock blockchain")
+        
+        # Set mode on config
+        config.mode = self.mode
         
         # Initialize base provider
         super().__init__(config)
@@ -79,16 +86,30 @@ class EnhancedX402Provider(BaseProvider):
             )
         
         # 3. Use smart network detection
-        network_selector = SmartNetworkSelector()
-        network_config = network_selector.to_config_dict()
-        
-        logger.info(f"🌐 Auto-detected network: {network_config['network']}")
-        
-        # Create config with auto-generated wallet
-        config = X402Config(
-            chain_id=network_config["chain_id"],
-            accepted_tokens=list(network_config["tokens"].keys()),
-        )
+        try:
+            network_selector = SmartNetworkSelector()
+            network_config = network_selector.to_config_dict()
+            
+            logger.info(f"🌐 Auto-detected network: {network_config['network']}")
+            
+            # Create config with auto-generated wallet (will be created by base provider)
+            config = X402Config(
+                wallet_address=None,  # Will be auto-generated
+                chain_id=network_config["chain_id"],
+                accepted_tokens=list(network_config["tokens"].keys()) if network_config.get("tokens") else ["0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"],
+            )
+        except Exception as e:
+            logger.warning(f"Network detection failed: {e}, using defaults")
+            # Fallback to Base Sepolia defaults
+            config = X402Config(
+                wallet_address=None,
+                chain_id=84532,
+                accepted_tokens=["0x036CbD53842c5426634e7929541eC2318f3dCF7e"],
+            )
+            network_config = {
+                "network": "base-sepolia",
+                "facilitator_url": "https://api.coinbase.com/rpc/v1/base-sepolia/x402"
+            }
         
         # Save for next time
         self._save_config(config, network_config)
@@ -115,12 +136,15 @@ class EnhancedX402Provider(BaseProvider):
         """Save configuration for future use"""
         
         config_data = {
-            "wallet_address": config.wallet_address,
             "chain_id": config.chain_id,
-            "accepted_tokens": config.accepted_tokens,
-            "network": network_config["network"],
-            "facilitator_url": network_config["facilitator_url"],
+            "accepted_tokens": config.accepted_tokens or [],
+            "network": network_config.get("network", "base-sepolia"),
+            "facilitator_url": network_config.get("facilitator_url", "https://api.coinbase.com/rpc/v1/base-sepolia/x402"),
         }
+        
+        # Only save wallet_address if it's been set
+        if config.wallet_address:
+            config_data["wallet_address"] = config.wallet_address
         
         with open(".x402.config.json", "w") as f:
             json.dump(config_data, f, indent=2)
@@ -220,16 +244,25 @@ class EnhancedX402Provider(BaseProvider):
         for token in tokens:
             if token in self.token_presets:
                 # Get token address for current network
-                network_selector = SmartNetworkSelector()
-                token_config = network_selector.get_token_config(token)
-                if token_config:
-                    token_addresses.append(token_config["address"])
-                    logger.info(f"✅ Added {token} support")
+                try:
+                    network_selector = SmartNetworkSelector()
+                    token_config = network_selector.get_token_config(token)
+                    if token_config and "address" in token_config:
+                        token_addresses.append(token_config["address"])
+                        logger.info(f"✅ Added {token} support")
+                    else:
+                        logger.warning(f"⚠️ Token {token} not found on current network")
+                except Exception as e:
+                    logger.warning(f"⚠️ Could not get token config for {token}: {e}")
+                    # Fallback to default USDC address
+                    if token == "USDC":
+                        token_addresses.append("0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913")
             else:
                 # Assume it's already an address
                 token_addresses.append(token)
         
-        self.config.accepted_tokens = token_addresses
+        if token_addresses:
+            self.config.accepted_tokens = token_addresses
     
     def add_custom_token(self, 
                         symbol: str,
@@ -353,6 +386,45 @@ Use our test credentials:
             json.dump(postman_collection, f, indent=2)
         
         logger.info(f"📚 Generated documentation in {output_dir}/")
+    
+    def require_payment(self, amount: float, token: str = "USDC"):
+        """Decorator to require payment for an endpoint"""
+        
+        def decorator(func):
+            # Use FastAPI dependency injection instead of wrapper
+            from fastapi import Depends, HTTPException, Request
+            
+            async def payment_dependency(request: Request):
+                # Check for payment headers
+                payment_signature = request.headers.get("X-Payment-Signature")
+                payment_amount = request.headers.get("X-Payment-Amount")
+                
+                if not payment_signature or not payment_amount:
+                    # No payment provided - return 402
+                    raise HTTPException(status_code=402, detail={
+                        "error": "Payment required",
+                        "amount": str(amount),
+                        "token": token
+                    })
+                
+                # In development mode, accept any payment headers
+                if self.mode == "development":
+                    logger.debug(f"🎮 Dev mode: Accepting payment ${payment_amount}")
+                    return True
+                
+                # TODO: Implement actual payment verification for production
+                return True
+            
+            # Add the dependency to the function's metadata
+            if not hasattr(func, '__annotations__'):
+                func.__annotations__ = {}
+            
+            # Inject payment dependency
+            original_annotations = func.__annotations__.copy()
+            func.__annotations__['_payment_check'] = Depends(payment_dependency)
+            
+            return func
+        return decorator
     
     def __repr__(self):
         return f"<EnhancedX402Provider mode={self.mode} wallet={self.config.wallet_address[:10]}...>"

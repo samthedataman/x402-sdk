@@ -67,8 +67,9 @@ class X402Provider:
         self.payment_cache: Dict[str, PaymentVerification] = {}
         self._cache_lock = asyncio.Lock()
         
-        logger.info(f"Initializing X402Provider with wallet {config.wallet_address[:8]}...")
-        logger.debug(f"Chain ID: {config.chain_id}, Accepted tokens: {len(config.accepted_tokens)}")
+        wallet_display = config.wallet_address[:8] + "..." if config.wallet_address else "None"
+        logger.info(f"Initializing X402Provider with wallet {wallet_display}")
+        logger.debug(f"Chain ID: {config.chain_id}, Accepted tokens: {len(config.accepted_tokens or [])}")
         
         # Start cache cleanup task if caching is enabled
         if self.config.cache_enabled:

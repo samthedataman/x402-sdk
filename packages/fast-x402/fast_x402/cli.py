@@ -65,7 +65,9 @@ def create(project_name: str, framework: str, network: str, no_fund: bool):
             sys.exit(1)
         
         wallet_manager = WalletManager()
-        wallet_data = wallet_manager.create_wallet("api_provider")
+        wallet_data, created = wallet_manager.create_or_load_wallet("api_provider")
+        if not created:
+            console.print("📁 [yellow]Using existing wallet[/]")
         progress.advance(task)
         
         # Step 2: Save configuration
