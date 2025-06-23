@@ -3,11 +3,11 @@
 import time
 from typing import Dict, Any
 from eth_account import Account
-from eth_account.messages import encode_structured_data
+from eth_account.messages import encode_typed_data
 from web3 import Web3
 
 from .models import PaymentData
-from .exceptions import InvalidSignatureError, PaymentExpiredError
+from .exceptions import InvalidSignatureError, PaymentExpiredError, InvalidPaymentError
 
 
 def verify_eip712_signature(payment_data: PaymentData) -> bool:
@@ -48,7 +48,7 @@ def verify_eip712_signature(payment_data: PaymentData) -> bool:
     
     try:
         # Encode the structured data
-        encoded_message = encode_structured_data(message)
+        encoded_message = encode_typed_data(message)
         
         # Recover signer from signature
         recovered_address = Account.recover_message(
@@ -82,20 +82,20 @@ def verify_payment_requirements(
     
     # Check recipient
     if payment_data.to.lower() != required_recipient.lower():
-        raise InvalidRecipientError(
+        raise InvalidPaymentError(
             f"Expected recipient {required_recipient}, got {payment_data.to}"
         )
     
     # Check token
     if payment_data.token.lower() != required_token.lower():
-        raise InvalidTokenError(
-            f"Expected token {required_token}, got {payment_data.token}"
+        raise InvalidPaymentError(
+            f"Expected token {required_token}, got {payment_data.token}", "INVALID_TOKEN"
         )
     
     # Check chain ID
     if payment_data.chain_id != required_chain_id:
-        raise InvalidChainError(
-            f"Expected chain {required_chain_id}, got {payment_data.chain_id}"
+        raise InvalidPaymentError(
+            f"Expected chain {required_chain_id}, got {payment_data.chain_id}", "INVALID_CHAIN"
         )
     
     # Check amount based on scheme
@@ -104,25 +104,15 @@ def verify_payment_requirements(
     
     if scheme == "exact":
         if payment_amount != required_amount_wei:
-            raise InvalidAmountError(
+            raise InvalidPaymentError(
                 f"Expected exact amount {required_amount_wei}, got {payment_amount}"
             )
     elif scheme == "upto":
         if payment_amount > required_amount_wei:
-            raise InvalidAmountError(
+            raise InvalidPaymentError(
                 f"Payment amount {payment_amount} exceeds maximum {required_amount_wei}"
             )
     else:
         raise ValueError(f"Unknown payment scheme: {scheme}")
 
 
-class InvalidTokenError(InvalidPaymentError):
-    """Raised when payment token is invalid"""
-    def __init__(self, message: str = "Invalid token"):
-        super().__init__(message, "INVALID_TOKEN")
-
-
-class InvalidChainError(InvalidPaymentError):
-    """Raised when payment chain is invalid"""
-    def __init__(self, message: str = "Invalid chain"):
-        super().__init__(message, "INVALID_CHAIN")

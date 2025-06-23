@@ -14,7 +14,7 @@ def read_requirements(filename):
 
 setup(
     name="fast-x402",
-    version="1.0.0",
+    version="1.1.0",
     author="x402 Team",
     author_email="support@x402.org",
     description="Lightning-fast x402 payment integration for FastAPI and modern Python web frameworks",
@@ -27,6 +27,10 @@ setup(
         "Source Code": "https://github.com/x402/fast-x402",
     },
     packages=find_packages(exclude=["tests", "tests.*", "examples", "examples.*"]),
+    include_package_data=True,
+    package_data={
+        "fast_x402": ["shared/*.py", "shared/**/*.py"],
+    },
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
@@ -49,6 +53,10 @@ setup(
         "pydantic>=2.0.0",
         "httpx>=0.25.0",
         "aioredis>=2.0.1",
+        "click>=8.0.0",
+        "rich>=13.0.0",
+        "mnemonic>=0.20",
+        "uvicorn>=0.24.0",
     ],
     extras_require={
         "dev": [
@@ -59,6 +67,15 @@ setup(
             "ruff>=0.0.286",
             "mypy>=1.5.0",
             "uvicorn>=0.24.0",
+        ],
+        "cli": [
+            "click>=8.0.0",
+            "rich>=13.0.0",
+        ],
+    },
+    entry_points={
+        "console_scripts": [
+            "x402=fast_x402.cli:cli",
         ],
     },
     keywords=[

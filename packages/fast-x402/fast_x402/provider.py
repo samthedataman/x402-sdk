@@ -3,9 +3,11 @@
 import asyncio
 import secrets
 import time
-from typing import Dict, Optional, List, Callable, Any
+from typing import Dict, Optional, List, Callable, Any, Tuple
 from datetime import datetime
 from collections import defaultdict
+import sys
+import os
 
 import httpx
 from web3 import Web3
@@ -22,12 +24,39 @@ from .exceptions import X402Error, InvalidPaymentError, InvalidSignatureError
 from .verification import verify_eip712_signature, verify_payment_requirements
 from .logger import logger
 
+try:
+    from .shared.wallet import WalletManager, generate_wallet
+    from .shared.analytics import get_analytics, AnalyticsEvent
+except ImportError:
+    # Fallback if shared module not available
+    WalletManager = None
+    get_analytics = None
+    AnalyticsEvent = None
+
 
 class X402Provider:
     """Main provider class for x402 payment processing"""
     
     def __init__(self, config: X402Config):
         self.config = config
+        
+        # Initialize wallet if not provided
+        if not config.wallet_address and WalletManager:
+            self.wallet_manager = WalletManager()
+            wallet_data, created = self.wallet_manager.create_or_load_wallet("provider")
+            config.wallet_address = wallet_data["address"]
+            if created:
+                logger.info(f"Created new provider wallet: {config.wallet_address}")
+                logger.warning(f"IMPORTANT: Save your private key securely!")
+                logger.warning(f"Private key: {wallet_data['private_key']}")
+                logger.warning(f"Mnemonic: {wallet_data['mnemonic']}")
+        else:
+            self.wallet_manager = None
+        
+        # Initialize shared analytics
+        self.analytics = get_analytics() if get_analytics else None
+        
+        # Local analytics data
         self.analytics_data = {
             "requests": 0,
             "paid": 0,
@@ -59,6 +88,19 @@ class X402Provider:
         
         if endpoint and endpoint not in self.analytics_data["endpoints"]:
             self.analytics_data["endpoints"][endpoint] = defaultdict(int)
+        
+        # Track payment request in shared analytics
+        if self.analytics and AnalyticsEvent:
+            asyncio.create_task(self.analytics.track_event(
+                AnalyticsEvent.PAYMENT_REQUESTED,
+                provider_address=self.config.wallet_address,
+                amount=float(amount),
+                metadata={
+                    "endpoint": endpoint,
+                    "token": token or self.config.accepted_tokens[0],
+                    "scheme": scheme,
+                }
+            ))
         
         nonce = "0x" + secrets.token_hex(32)
         expires_at = int(time.time()) + 300  # 5 minutes
@@ -112,6 +154,20 @@ class X402Provider:
             # Update analytics
             await self._update_analytics(payment_data, endpoint)
             
+            # Track successful payment in shared analytics
+            if self.analytics and AnalyticsEvent:
+                await self.analytics.track_event(
+                    AnalyticsEvent.PAYMENT_COMPLETED,
+                    wallet_address=payment_data.from_address,
+                    provider_address=self.config.wallet_address,
+                    amount=float(payment_data.value) / 1e6,  # Convert from USDC units
+                    metadata={
+                        "token": payment_data.token,
+                        "chain_id": payment_data.chain_id,
+                        "endpoint": endpoint,
+                    }
+                )
+            
             # Create verification result
             verification = PaymentVerification(
                 valid=True,
@@ -129,9 +185,25 @@ class X402Provider:
             
             return verification
             
-        except X402Error:
+        except X402Error as e:
+            # Track failed payment in shared analytics
+            if self.analytics and AnalyticsEvent:
+                await self.analytics.track_event(
+                    AnalyticsEvent.PAYMENT_FAILED,
+                    wallet_address=payment_data.from_address if payment_data else None,
+                    provider_address=self.config.wallet_address,
+                    metadata={"reason": str(e), "endpoint": endpoint}
+                )
             raise
         except Exception as e:
+            # Track failed payment in shared analytics
+            if self.analytics and AnalyticsEvent:
+                await self.analytics.track_event(
+                    AnalyticsEvent.PAYMENT_FAILED,
+                    wallet_address=payment_data.from_address if payment_data else None,
+                    provider_address=self.config.wallet_address,
+                    metadata={"reason": str(e), "endpoint": endpoint}
+                )
             raise InvalidPaymentError(f"Payment verification failed: {str(e)}")
     
     async def _run_custom_validation(self, payment_data: PaymentData) -> bool:
@@ -237,3 +309,35 @@ class X402Provider:
         except Exception:
             # Silently fail - don't block payment processing
             pass
+    
+    def create_wallet(self, name: Optional[str] = None) -> Tuple[str, str]:
+        """Create a new wallet for the provider"""
+        if not WalletManager:
+            raise RuntimeError("Wallet creation not available - install mnemonic package")
+        
+        wallet_name = name or f"provider_{int(time.time())}"
+        manager = WalletManager()
+        wallet_data = manager.create_wallet(wallet_name)
+        
+        # Track wallet creation
+        if self.analytics and AnalyticsEvent:
+            asyncio.create_task(self.analytics.track_event(
+                AnalyticsEvent.WALLET_CREATED,
+                wallet_address=wallet_data["address"],
+                metadata={"type": "provider", "name": wallet_name}
+            ))
+        
+        return wallet_data["address"], wallet_data["private_key"]
+    
+    def export_wallet(self, include_private_key: bool = False) -> Dict[str, str]:
+        """Export wallet information"""
+        if self.wallet_manager:
+            return self.wallet_manager.export_wallet("provider", include_private_key)
+        else:
+            return {"address": self.config.wallet_address}
+    
+    def get_shared_analytics(self) -> Optional[Dict[str, Any]]:
+        """Get metrics from shared analytics backend"""
+        if self.analytics:
+            return self.analytics.get_provider_metrics(self.config.wallet_address)
+        return None

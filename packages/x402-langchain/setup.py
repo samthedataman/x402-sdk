@@ -13,7 +13,7 @@ def read_requirements(filename):
 
 setup(
     name="x402-langchain",
-    version="1.0.0",
+    version="1.1.0",
     author="x402 Team",
     author_email="support@x402.org",
     description="x402 payment integration for LangChain - Enable autonomous AI agent payments",
@@ -26,6 +26,10 @@ setup(
         "Source Code": "https://github.com/x402/x402-langchain",
     },
     packages=find_packages(exclude=["tests", "tests.*", "examples", "examples.*"]),
+    include_package_data=True,
+    package_data={
+        "x402_langchain": ["shared/*.py", "shared/**/*.py"],
+    },
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
@@ -47,7 +51,8 @@ setup(
         "web3>=6.11.0",
         "httpx>=0.25.0",
         "pydantic>=2.0.0",
-        "aiohttp>=3.9.0",
+        "aiohttp>=3.8.0",
+        "mnemonic>=0.20",
     ],
     extras_require={
         "dev": [

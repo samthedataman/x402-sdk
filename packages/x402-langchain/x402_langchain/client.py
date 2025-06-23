@@ -8,7 +8,7 @@ import re
 
 import httpx
 from eth_account import Account
-from eth_account.messages import encode_structured_data
+from eth_account.messages import encode_typed_data
 from web3 import Web3
 
 from .config import X402Config
@@ -79,6 +79,13 @@ class X402Client:
             
             # Check spending limits
             if not self._check_spending_limits(amount):
+                if self.analytics and AnalyticsEvent:
+                    asyncio.create_task(self.analytics.track_event(
+                        AnalyticsEvent.SPENDING_LIMIT_REACHED,
+                        wallet_address=self.account.address,
+                        amount=amount,
+                        metadata={"url": url}
+                    ))
                 raise SpendingLimitError(f"Payment would exceed spending limits")
             
             # Get approval if needed
@@ -168,7 +175,7 @@ class X402Client:
         }
         
         # Sign the message
-        encoded_message = encode_structured_data(message)
+        encoded_message = encode_typed_data(message)
         signed = self.account.sign_message(encoded_message)
         
         return PaymentAuthorization(
