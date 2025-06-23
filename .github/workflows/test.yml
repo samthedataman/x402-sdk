@@ -1,0 +1,26 @@
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+    
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install dependencies
+      run: |
+        pip install -e packages/fast-x402[dev]
+        pip install -e packages/x402-langchain[dev]
+    
+    - name: Run tests
+      run: |
+        pytest packages/fast-x402/tests/
+        pytest packages/x402-langchain/tests/

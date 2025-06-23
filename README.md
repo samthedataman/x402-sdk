@@ -1,5 +1,10 @@
 # x402 Payment Protocol SDK Monorepo 🚀
 
+[![PyPI - fast-x402](https://img.shields.io/pypi/v/fast-x402.svg)](https://pypi.org/project/fast-x402/)
+[![PyPI - x402-langchain](https://img.shields.io/pypi/v/x402-langchain.svg)](https://pypi.org/project/x402-langchain/)
+[![Python](https://img.shields.io/pypi/pyversions/fast-x402.svg)](https://pypi.org/project/fast-x402/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 This monorepo contains Python SDKs for the x402 payment protocol - enabling instant micropayments for both API providers and AI agents.
 
 ## 📦 Packages
