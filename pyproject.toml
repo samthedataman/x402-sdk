@@ -1,0 +1,40 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "x402-monorepo"
+version = "1.0.0"
+description = "x402 Payment Protocol - Python SDKs for instant internet-native payments"
+authors = ["x402 Team"]
+readme = "README.md"
+packages = [
+    { include = "fast_x402", from = "packages/fast-x402" },
+    { include = "x402_langchain", from = "packages/x402-langchain" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pytest-asyncio = "^0.21.0"
+pytest-cov = "^4.1.0"
+black = "^23.7.0"
+ruff = "^0.0.286"
+mypy = "^1.5.0"
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "I", "N", "W"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true

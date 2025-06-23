@@ -1,0 +1,146 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  release:
+    types: [ created ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11']
+        package: ['fast-x402', 'x402-langchain']
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        version: latest
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+    
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: packages/${{ matrix.package }}/.venv
+        key: ${{ runner.os }}-${{ matrix.python-version }}-${{ matrix.package }}-${{ hashFiles('**/poetry.lock') }}
+    
+    - name: Install dependencies
+      working-directory: packages/${{ matrix.package }}
+      run: |
+        poetry install --with dev
+    
+    - name: Run linting
+      working-directory: packages/${{ matrix.package }}
+      run: |
+        poetry run ruff check .
+        poetry run black --check .
+    
+    - name: Run type checking
+      working-directory: packages/${{ matrix.package }}
+      run: |
+        poetry run mypy . --ignore-missing-imports
+    
+    - name: Run tests
+      working-directory: packages/${{ matrix.package }}
+      run: |
+        poetry run pytest tests/ -v --cov=${{ matrix.package }} --cov-report=xml
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: packages/${{ matrix.package }}/coverage.xml
+        flags: ${{ matrix.package }}
+        name: ${{ matrix.package }}-${{ matrix.python-version }}
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Run Bandit Security Scan
+      uses: gaurav-nelson/bandit-action@v1
+      with:
+        path: "packages/"
+    
+    - name: Run Safety Check
+      run: |
+        pip install safety
+        safety check
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install build tools
+      run: |
+        pip install build twine
+    
+    - name: Build fast-x402
+      working-directory: packages/fast-x402
+      run: |
+        python -m build
+        twine check dist/*
+    
+    - name: Build x402-langchain
+      working-directory: packages/x402-langchain
+      run: |
+        python -m build
+        twine check dist/*
+    
+    - name: Store build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: dist-packages
+        path: packages/*/dist/
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install twine
+      run: pip install twine
+    
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: dist-packages
+        path: dist/
+    
+    - name: Publish to PyPI
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+      run: |
+        twine upload dist/fast-x402/dist/*
+        twine upload dist/x402-langchain/dist/*

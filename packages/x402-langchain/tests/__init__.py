@@ -1,0 +1,1 @@
+"""Tests for x402-langchain package"""

@@ -1,0 +1,33 @@
+{
+  "name": "x402-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "x402 Payment Protocol - Enabling instant internet-native payments for humans and AI agents",
+  "author": "x402 Team",
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces",
+    "clean": "npm run clean --workspaces && rm -rf node_modules",
+    "dev:provider": "npm run dev -w fast-x402",
+    "dev:langchain": "npm run dev -w @x402/langchain",
+    "test:provider": "npm run test -w fast-x402",
+    "test:langchain": "npm run test -w @x402/langchain"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.4",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}

@@ -1,0 +1,46 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "fast-x402"
+version = "1.0.0"
+description = "Lightning-fast x402 payment integration for FastAPI and modern Python web frameworks"
+authors = ["x402 Team"]
+readme = "README.md"
+license = "MIT"
+homepage = "https://github.com/x402/fast-x402"
+repository = "https://github.com/x402/fast-x402"
+keywords = ["x402", "payments", "micropayments", "fastapi", "http402", "blockchain"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Framework :: FastAPI",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.104.0"
+eth-account = "^0.10.0"
+web3 = "^6.11.0"
+pydantic = "^2.5.0"
+aioredis = { version = "^2.0.1", optional = true }
+httpx = "^0.25.0"
+
+[tool.poetry.extras]
+cache = ["aioredis"]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pytest-asyncio = "^0.21.0"
+pytest-cov = "^4.1.0"
+black = "^23.7.0"
+ruff = "^0.0.286"
+mypy = "^1.5.0"
+uvicorn = "^0.24.0"
